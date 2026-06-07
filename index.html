@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Health.GG (헬스.GG) — Investor Demo</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream: #f5efe3;
+  --parchment: #ede4d3;
+  --stone: #e8dfd0;
+  --panel: #faf6ef;
+  --panel2: #f0e8d8;
+  --border: #c4b5a0;
+  --border-dark: #8b7355;
+  --text: #3d2e1f;
+  --text-mid: #6b5a45;
+  --text-dim: #9a8878;
+  --green: #4caf50;
+  --green-dark: #388e3c;
+  --blue: #2196f3;
+  --red: #e53935;
+  --gold: #d4a017;
+  --purple: #7b1fa2;
+  --orange: #ff8f00;
+  --nav-bg: #3d2e1f;
+  --shadow: 0 3px 10px rgba(61,46,31,0.12);
+  --shadow-btn: 0 4px 0 #2e7d32;
+}
+
+html, body {
+  height: 100%;
+  background: linear-gradient(160deg, #d4c4a8 0%, #a89880 50%, #8a7a68 100%);
+  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--text);
+  overflow: hidden;
+}
+
+.phone-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 16px;
+}
+
+.phone-frame {
+  width: 100%;
+  max-width: 412px;
+  height: 844px;
+  max-height: 95vh;
+  background: var(--cream);
+  border: 4px solid var(--border-dark);
+  border-radius: 32px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.phone-notch {
+  height: 26px;
+  background: var(--parchment);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 10px;
+  color: var(--text-mid);
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── Header ── */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--panel);
+  border-bottom: 2px solid var(--border);
+  flex-shrink: 0;
+}
+
+.profile-btn, .settings-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--stone);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s;
+}
+.profile-btn:hover, .settings-btn:hover { transform: scale(1.05); }
+
+.notif-pill {
+  flex: 1;
+  background: linear-gradient(90deg, #fff8e8, #ffe8c8);
+  border: 2px solid #e8c878;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--text);
+  box-shadow: var(--shadow);
+  animation: notifPulse 3s ease-in-out infinite;
+}
+@keyframes notifPulse {
+  0%,100% { box-shadow: var(--shadow); }
+  50% { box-shadow: 0 0 12px rgba(255,143,0,0.3); }
+}
+.notif-pill .fire { animation: fireWiggle 0.5s ease-in-out infinite alternate; }
+@keyframes fireWiggle { from{transform:rotate(-5deg)} to{transform:rotate(5deg)} }
+
+/* ── Tab Content ── */
+.tab-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  background: var(--cream);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-dark) transparent;
+}
+.tab-panel { display: none; animation: tabIn 0.3s ease; }
+.tab-panel.active { display: block; }
+@keyframes tabIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── Stone Panel ── */
+.stone-panel {
+  background: linear-gradient(180deg, var(--panel) 0%, var(--panel2) 100%);
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  padding: 12px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow);
+}
+.panel-title {
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px dashed var(--border);
+}
+.panel-sub { font-size: 9px; color: var(--text-dim); font-weight: 400; }
+
+/* ── Battle Stage (Home) ── */
+.stage-frame {
+  background: linear-gradient(180deg, #d8cfc0 0%, #c8bfb0 100%);
+  border: 3px solid var(--border-dark);
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow);
+}
+.stage-banner {
+  background: linear-gradient(90deg, #a89070, #c4a880);
+  text-align: center;
+  padding: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  border-bottom: 2px solid var(--border-dark);
+}
+.stage-name {
+  text-align: center;
+  padding: 6px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--parchment);
+}
+.battle-scene {
+  position: relative;
+  height: 140px;
+  background: linear-gradient(180deg, #4a3728 0%, #2a1f18 60%, #1a120e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.battle-scene::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 80%, rgba(255,100,0,0.2) 0%, transparent 60%);
+}
+.battle-heroes {
+  position: absolute; left: 8px; bottom: 10px;
+  display: flex; gap: 2px; font-size: 22px; z-index: 2;
+}
+.battle-vs {
+  font-size: 28px; font-weight: 900; color: #ff6600;
+  text-shadow: 0 0 12px #ff4400, 2px 2px 0 #000;
+  z-index: 3; animation: vsPulse 1.5s ease-in-out infinite;
+}
+@keyframes vsPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+.battle-boss {
+  position: absolute; right: 10px; bottom: 8px;
+  font-size: 48px; z-index: 2;
+  filter: drop-shadow(0 0 8px rgba(255,0,0,0.5));
+}
+.battle-gold { position: absolute; right: 30px; bottom: 2px; font-size: 14px; z-index: 1; }
+.stage-footer {
+  background: var(--parchment);
+  padding: 6px 10px;
+  font-size: 10px;
+  text-align: center;
+  color: var(--text-mid);
+  border-top: 1px solid var(--border);
+}
+
+.btn-explore {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(180deg, #66bb6a 0%, #43a047 50%, #388e3c 100%);
+  border: 3px solid #2e7d32;
+  border-radius: 14px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: var(--shadow-btn);
+  margin-bottom: 10px;
+  transition: all 0.2s;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+.btn-explore:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 0 #2e7d32; }
+.btn-explore:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 2px 0 #2e7d32; }
+.btn-explore:disabled { opacity: 0.6; cursor: not-allowed; filter: grayscale(0.3); }
+
+/* ── Exploration Battle Overlay ── */
+.exploration-overlay {
+  position: absolute; inset: 0;
+  background: rgba(20,12,8,0.92);
+  z-index: 120;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.exploration-overlay.active { display: flex; animation: overlayIn 0.3s ease; }
+
+.battle-arena {
+  width: 100%; max-width: 340px;
+  background: linear-gradient(180deg, #4a3728 0%, #2a1f18 50%, #1a120e 100%);
+  border: 3px solid var(--border-dark);
+  border-radius: 18px;
+  padding: 16px 12px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(255,100,0,0.2);
+}
+.battle-arena::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 100%, rgba(255,80,0,0.25) 0%, transparent 60%);
+  pointer-events: none;
+}
+.battle-status {
+  text-align: center; font-size: 11px; font-weight: 900;
+  color: #ffcc80; margin-bottom: 10px;
+  text-shadow: 0 0 8px rgba(255,150,0,0.5);
+}
+.battle-field {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  height: 120px; position: relative; padding: 0 8px;
+}
+.battle-party {
+  display: flex; gap: 4px; font-size: 28px;
+  animation: partyIdle 1s ease-in-out infinite;
+}
+@keyframes partyIdle { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+.battle-party.attacking { animation: partyAttack 0.4s ease; }
+@keyframes partyAttack {
+  0% { transform: translateX(0); }
+  40% { transform: translateX(30px) scale(1.1); }
+  100% { transform: translateX(0); }
+}
+.battle-enemy {
+  font-size: 56px;
+  filter: drop-shadow(0 0 10px rgba(255,0,0,0.5));
+  transition: transform 0.15s, filter 0.3s;
+}
+.battle-enemy.hit { animation: enemyHit 0.35s ease; }
+@keyframes enemyHit {
+  0%,100% { transform: translateX(0); filter: brightness(1); }
+  25% { transform: translateX(8px) scale(0.95); filter: brightness(2) hue-rotate(-20deg); }
+  50% { transform: translateX(-6px); }
+}
+.battle-enemy.defeated {
+  animation: enemyDefeat 0.8s ease forwards;
+}
+@keyframes enemyDefeat {
+  to { transform: scale(0) rotate(20deg); opacity: 0; filter: brightness(3); }
+}
+.slash-fx {
+  position: absolute; font-size: 32px; font-weight: 900;
+  color: #fff; text-shadow: 0 0 10px #ff6600;
+  opacity: 0; pointer-events: none; z-index: 5;
+}
+.slash-fx.show { animation: slashPop 0.5s ease forwards; }
+@keyframes slashPop {
+  0% { opacity: 0; transform: scale(0.5) rotate(-20deg); }
+  30% { opacity: 1; transform: scale(1.3) rotate(10deg); }
+  100% { opacity: 0; transform: scale(1.6) translateY(-20px); }
+}
+.dmg-pop {
+  position: absolute; font-size: 18px; font-weight: 900;
+  color: #ff4444; text-shadow: 2px 2px 0 #000;
+  animation: dmgFloat 0.7s ease forwards;
+  pointer-events: none; z-index: 6;
+}
+@keyframes dmgFloat {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-40px) scale(1.3); }
+}
+.boss-hp-bar {
+  margin-top: 12px;
+  height: 12px; background: #333;
+  border: 2px solid #666; border-radius: 8px; overflow: hidden;
+}
+.boss-hp-fill {
+  height: 100%; width: 100%;
+  background: linear-gradient(90deg, #c62828, #ff5252);
+  border-radius: 6px;
+  transition: width 0.4s ease;
+}
+.battle-log {
+  margin-top: 10px; text-align: center;
+  font-size: 12px; font-weight: 700; color: #ffe0b2;
+  min-height: 18px;
+}
+
+/* ── Clear Phase ── */
+.clear-panel {
+  display: none;
+  text-align: center;
+  animation: modalPop 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  width: 100%; max-width: 320px;
+}
+.exploration-overlay.phase-clear .battle-arena { display: none; }
+.exploration-overlay.phase-clear .clear-panel { display: block; }
+
+.clear-badge {
+  font-size: 42px; font-weight: 900;
+  background: linear-gradient(180deg, #ffd54f, #ff8f00);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.3));
+  margin-bottom: 4px;
+  animation: clearBounce 0.6s ease infinite alternate;
+}
+@keyframes clearBounce { from{transform:scale(1)} to{transform:scale(1.05)} }
+.clear-sub {
+  font-size: 14px; font-weight: 900; color: #fff;
+  margin-bottom: 16px;
+  text-shadow: 0 0 12px rgba(255,200,0,0.6);
+}
+.clear-rewards-box {
+  background: var(--panel);
+  border: 3px solid var(--gold);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 0 20px rgba(212,160,23,0.3);
+}
+.clear-rewards-title {
+  font-size: 12px; font-weight: 900; color: var(--gold);
+  margin-bottom: 12px;
+}
+.clear-rewards-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+}
+.clear-reward-item {
+  background: var(--stone);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 6px;
+  animation: rewardReveal 0.5s ease backwards;
+}
+.clear-reward-item:nth-child(1) { animation-delay: 0.1s; }
+.clear-reward-item:nth-child(2) { animation-delay: 0.25s; }
+.clear-reward-item:nth-child(3) { animation-delay: 0.4s; }
+@keyframes rewardReveal {
+  from { opacity: 0; transform: translateY(12px) scale(0.8); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.clear-reward-item .cr-icon { font-size: 24px; }
+.clear-reward-item .cr-val {
+  font-size: 12px; font-weight: 900; color: var(--gold); margin-top: 4px;
+}
+.clear-reward-item .cr-label { font-size: 9px; color: var(--text-dim); margin-top: 2px; }
+.btn-claim {
+  width: 100%; padding: 14px;
+  background: linear-gradient(180deg, #ffd54f, #ff8f00);
+  border: 3px solid #e65100; border-radius: 14px;
+  color: #fff; font-size: 14px; font-weight: 900;
+  cursor: pointer; box-shadow: 0 4px 0 #e65100;
+  animation: claimPulse 1.2s ease-in-out infinite;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+@keyframes claimPulse {
+  0%,100% { box-shadow: 0 4px 0 #e65100, 0 0 8px rgba(255,200,0,0.3); }
+  50% { box-shadow: 0 4px 0 #e65100, 0 0 20px rgba(255,200,0,0.6); }
+}
+.btn-claim:hover { transform: translateY(-2px); }
+.btn-claim.claimed {
+  background: var(--green); border-color: var(--green-dark);
+  box-shadow: 0 3px 0 var(--green-dark);
+  animation: none; cursor: default;
+}
+.clear-skip {
+  margin-top: 10px; background: none; border: none;
+  color: #aaa; font-size: 10px; cursor: pointer;
+}
+
+/* ── Progress Bars ── */
+.stat-bar-group { margin-bottom: 8px; }
+.stat-bar-label {
+  display: flex; justify-content: space-between;
+  font-size: 10px; font-weight: 700; margin-bottom: 4px; color: var(--text);
+}
+.stat-bar-label .val { color: var(--text-mid); font-weight: 500; }
+.progress-track {
+  height: 16px;
+  background: #ddd5c8;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+.progress-fill.exp { background: linear-gradient(90deg, #42a5f5, #1e88e5); }
+.progress-fill.stamina { background: linear-gradient(90deg, #ef5350, #c62828); }
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+.status-card {
+  background: var(--stone);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 4px;
+  text-align: center;
+}
+.status-card .label { font-size: 8px; color: var(--text-dim); font-weight: 700; line-height: 1.3; }
+.status-card .value {
+  font-size: 13px; font-weight: 900; color: var(--text);
+  margin-top: 4px;
+}
+
+.streak-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.streak-section .flame { font-size: 18px; }
+.system-log {
+  background: #fff;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 6px;
+}
+
+/* ── Character Info Tab ── */
+.avatar-section { display: flex; gap: 12px; align-items: center; }
+.avatar-frame {
+  width: 72px; height: 72px;
+  border: 3px solid var(--green);
+  border-radius: 14px;
+  background: var(--stone);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+  position: relative;
+  box-shadow: 0 0 12px rgba(76,175,80,0.3);
+  flex-shrink: 0;
+}
+.avatar-frame .level-badge {
+  position: absolute; bottom: -6px; right: -6px;
+  background: var(--purple); color: #fff;
+  font-size: 9px; font-weight: 900;
+  padding: 2px 6px; border-radius: 8px;
+  border: 2px solid #fff;
+}
+.user-nickname { font-size: 16px; font-weight: 900; color: var(--text); }
+.user-id {
+  font-size: 9px; color: var(--text-dim);
+  font-family: monospace;
+  background: var(--stone);
+  padding: 3px 6px; border-radius: 6px;
+  border: 1px solid var(--border);
+  margin: 4px 0 6px;
+  word-break: break-all;
+}
+.membership-toggle {
+  display: inline-flex; align-items: center; gap: 6px;
+  cursor: pointer; font-size: 11px; font-weight: 700;
+}
+.toggle-track {
+  width: 44px; height: 22px;
+  background: #ccc; border: 2px solid var(--border);
+  border-radius: 12px; position: relative; transition: background 0.3s;
+}
+.toggle-track.plus { background: linear-gradient(90deg, #9c27b0, #7b1fa2); border-color: var(--purple); }
+.toggle-thumb {
+  width: 16px; height: 16px; background: #fff;
+  border-radius: 50%; position: absolute;
+  top: 1px; left: 1px; transition: left 0.3s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.toggle-track.plus .toggle-thumb { left: 23px; background: var(--gold); }
+.badge-plus {
+  font-size: 9px; font-weight: 900;
+  padding: 2px 6px; background: var(--purple);
+  color: #fff; border-radius: 6px; display: none;
+}
+.badge-plus.visible { display: inline-block; }
+
+.stat-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 0; border-bottom: 1px dashed var(--border); font-size: 13px;
+}
+.stat-row:last-child { border-bottom: none; }
+.stat-name { font-weight: 700; }
+.stat-name .abbr { color: var(--purple); }
+.stat-val { font-weight: 900; color: var(--green-dark); }
+.btn-plus {
+  width: 30px; height: 30px;
+  background: var(--purple); border: 2px solid #fff;
+  border-radius: 8px; color: #fff; font-size: 18px; font-weight: 900;
+  cursor: pointer; box-shadow: 0 2px 0 #4a148c;
+  transition: all 0.15s;
+}
+.btn-plus:hover { transform: translateY(-1px); }
+.btn-plus:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.skin-selector { display: flex; gap: 8px; margin-top: 8px; }
+.skin-btn {
+  flex: 1; padding: 8px 4px;
+  border: 2px solid var(--border); border-radius: 12px;
+  background: var(--stone); color: var(--text-dim);
+  cursor: pointer; text-align: center; font-size: 10px; font-weight: 700;
+  transition: all 0.2s;
+}
+.skin-btn.active { border-color: var(--green); color: var(--green-dark); background: #e8f5e9; }
+.skin-btn .skin-emoji { display: block; font-size: 22px; margin-bottom: 4px; }
+
+.quest-list { display: flex; flex-direction: column; gap: 8px; }
+.quest-card {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--stone); border: 2px solid var(--border);
+  border-radius: 12px; padding: 10px;
+}
+.quest-card.done { border-color: var(--gold); background: #fff8e8; }
+.quest-icon { font-size: 24px; }
+.quest-info { flex: 1; font-size: 11px; }
+.quest-info .title { font-weight: 700; }
+.quest-info .desc { color: var(--text-dim); font-size: 10px; }
+.quest-reward-btn {
+  font-size: 9px; font-weight: 900;
+  padding: 6px 8px; border: 2px solid var(--gold);
+  border-radius: 8px; background: #fff8e8; color: var(--gold);
+  cursor: pointer; white-space: nowrap;
+}
+.quest-reward-btn.ready { background: var(--gold); color: #fff; animation: rewardPulse 1s ease-in-out infinite; }
+@keyframes rewardPulse { 0%,100%{box-shadow:0 0 4px var(--gold)} 50%{box-shadow:0 0 12px var(--gold)} }
+.quest-reward-btn:disabled { opacity: 0.4; cursor: not-allowed; animation: none; }
+
+/* ── Workout Tab ── */
+.training-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.training-tab {
+  padding: 12px 8px; border: 3px solid var(--border);
+  border-radius: 14px; background: var(--stone);
+  color: var(--text-dim); cursor: pointer; text-align: center;
+  font-size: 11px; font-weight: 700; transition: all 0.25s;
+}
+.training-tab.active {
+  border-color: var(--green); color: var(--green-dark);
+  background: #e8f5e9; box-shadow: 0 0 12px rgba(76,175,80,0.3);
+}
+.training-tab .emoji { display: block; font-size: 22px; margin-bottom: 4px; }
+
+.form-group { margin-bottom: 10px; }
+.form-label { font-size: 10px; font-weight: 700; color: var(--text-mid); margin-bottom: 4px; display: block; }
+.form-select, .form-input {
+  width: 100%; padding: 10px;
+  background: #fff; border: 2px solid var(--border);
+  border-radius: 10px; color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif; font-size: 13px;
+}
+.form-select:focus, .form-input:focus { outline: none; border-color: var(--green); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+.timer-display {
+  text-align: center; padding: 16px;
+  background: #fff; border: 3px solid var(--purple);
+  border-radius: 14px; margin-bottom: 10px;
+}
+.timer-display .time {
+  font-size: 32px; font-weight: 900; color: var(--green-dark);
+  letter-spacing: 4px;
+}
+.timer-display .label { font-size: 10px; color: var(--text-dim); margin-top: 4px; }
+.timer-controls { display: flex; gap: 8px; justify-content: center; margin-bottom: 10px; }
+
+.btn-primary {
+  width: 100%; padding: 14px;
+  background: linear-gradient(180deg, #66bb6a, #388e3c);
+  border: 3px solid #2e7d32; border-radius: 14px;
+  color: #fff; font-size: 12px; font-weight: 900;
+  cursor: pointer; box-shadow: var(--shadow-btn);
+  transition: all 0.2s; margin-top: 4px;
+}
+.btn-primary:hover { transform: translateY(-2px); }
+.btn-secondary {
+  padding: 10px 14px; background: var(--stone);
+  border: 2px solid var(--border); border-radius: 10px;
+  color: var(--text); font-size: 11px; font-weight: 700;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: var(--blue); color: var(--blue); }
+.btn-purple {
+  background: linear-gradient(180deg, #ab47bc, #7b1fa2);
+  border-color: #6a1b9a; box-shadow: 0 4px 0 #4a148c;
+}
+.btn-ad {
+  background: linear-gradient(180deg, #ffca28, #ff8f00);
+  border-color: #e65100; color: #fff;
+  box-shadow: 0 4px 0 #e65100; margin-top: 8px;
+}
+
+.wearable-panel { background: linear-gradient(135deg, #e3f2fd, #bbdefb); border-color: var(--blue); }
+.check-item { display: flex; align-items: center; gap: 8px; font-size: 11px; padding: 4px 0; color: #1565c0; }
+.check-item .check { color: var(--green); font-size: 14px; font-weight: 900; }
+
+/* ── AI Tab ── */
+.analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+.analytics-card {
+  background: var(--stone); border: 2px solid var(--border);
+  border-radius: 12px; padding: 10px; text-align: center;
+}
+.analytics-card .a-label { font-size: 9px; color: var(--text-dim); font-weight: 700; }
+.analytics-card .a-val { font-size: 16px; font-weight: 900; margin-top: 4px; }
+.analytics-card .a-val.red { color: var(--red); }
+.analytics-card .a-val.blue { color: var(--blue); }
+
+.chart-box {
+  background: #fff; border: 2px solid var(--border);
+  border-radius: 12px; padding: 10px; margin-bottom: 10px;
+}
+.chart-bars {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  height: 60px; gap: 4px; margin-top: 8px;
+}
+.chart-bar {
+  flex: 1; background: linear-gradient(180deg, var(--blue), #1565c0);
+  border-radius: 4px 4px 0 0; min-height: 8px;
+  transition: height 0.6s ease;
+}
+.chart-labels {
+  display: flex; justify-content: space-between;
+  font-size: 9px; color: var(--text-dim); margin-top: 4px;
+}
+
+.ai-output { display: none; }
+.ai-output.visible { display: block; animation: tabIn 0.4s ease; }
+.ai-card {
+  background: #fff; border: 2px solid var(--purple);
+  border-radius: 12px; padding: 10px; margin-bottom: 8px;
+}
+.ai-card-title { font-size: 11px; font-weight: 900; color: var(--purple); margin-bottom: 6px; }
+.ai-card-body { font-size: 11px; line-height: 1.6; color: var(--text); }
+
+.spinner-overlay { display: none; text-align: center; padding: 30px; }
+.spinner-overlay.active { display: block; }
+.spinner {
+  width: 36px; height: 36px;
+  border: 4px solid var(--border);
+  border-top-color: var(--purple);
+  border-radius: 50%;
+  margin: 0 auto 12px;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Shop Tab ── */
+.currency-bar { display: flex; gap: 10px; justify-content: center; margin-bottom: 12px; }
+.currency-item {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--stone); border: 2px solid var(--gold);
+  border-radius: 12px; padding: 8px 14px;
+  font-size: 14px; font-weight: 900; color: var(--gold);
+}
+.shop-section-title {
+  font-size: 11px; font-weight: 900; color: var(--purple);
+  margin: 10px 0 8px; padding-bottom: 4px;
+  border-bottom: 2px dashed var(--border);
+}
+.shop-item {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--stone); border: 2px solid var(--border);
+  border-radius: 12px; padding: 10px; margin-bottom: 8px;
+  transition: border-color 0.2s;
+}
+.shop-item:hover { border-color: var(--gold); }
+.shop-item .item-icon { font-size: 28px; }
+.shop-item .item-info { flex: 1; }
+.shop-item .item-name { font-size: 12px; font-weight: 700; }
+.shop-item .item-desc { font-size: 10px; color: var(--text-dim); }
+.shop-buy-btn {
+  font-size: 10px; font-weight: 900;
+  padding: 8px 10px; background: #fff8e8;
+  border: 2px solid var(--gold); border-radius: 8px;
+  color: var(--gold); cursor: pointer; white-space: nowrap;
+}
+.shop-buy-btn:hover { background: var(--gold); color: #fff; }
+.shop-buy-btn.equipped { background: var(--green); border-color: var(--green); color: #fff; }
+
+/* ── Bottom Nav (5 tabs) ── */
+.bottom-nav {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background: var(--nav-bg);
+  flex-shrink: 0;
+  height: 62px;
+  border-top: 3px solid #2a1f14;
+}
+.nav-tab {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 2px; cursor: pointer;
+  border: none; background: transparent;
+  color: #a89080; font-size: 9px; font-weight: 700;
+  padding: 4px 2px; position: relative;
+  transition: color 0.25s;
+}
+.nav-tab .nav-icon { font-size: 20px; transition: transform 0.25s; }
+.nav-tab.active { color: #fff; }
+.nav-tab.active .nav-icon { transform: scale(1.12); }
+.nav-tab.active::after {
+  content: '';
+  position: absolute; bottom: 0;
+  left: 15%; right: 15%; height: 3px;
+  background: var(--green);
+  border-radius: 3px 3px 0 0;
+}
+.nav-tab.nav-home.active .nav-icon { font-size: 24px; }
+
+/* ── Modals & Toast ── */
+.modal-overlay {
+  position: absolute; inset: 0;
+  background: rgba(61,46,31,0.7);
+  display: none; align-items: center; justify-content: center;
+  z-index: 100; padding: 20px;
+}
+.modal-overlay.active { display: flex; animation: overlayIn 0.3s ease; }
+@keyframes overlayIn { from{opacity:0} to{opacity:1} }
+.modal-box {
+  background: var(--panel); border: 3px solid var(--green);
+  border-radius: 18px; padding: 20px; text-align: center;
+  max-width: 300px; width: 100%;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  animation: modalPop 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes modalPop { from{transform:scale(0.6);opacity:0} to{transform:scale(1);opacity:1} }
+.modal-box .modal-icon { font-size: 48px; margin-bottom: 10px; }
+.modal-box .modal-title { font-size: 14px; font-weight: 900; color: var(--green-dark); margin-bottom: 10px; line-height: 1.5; }
+.modal-box .modal-body { font-size: 12px; line-height: 1.6; margin-bottom: 14px; }
+.modal-rewards { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 14px; }
+.modal-reward-item {
+  background: var(--stone); border: 2px solid var(--border);
+  border-radius: 10px; padding: 8px 4px; font-size: 10px;
+}
+.modal-reward-item .r-val { font-weight: 900; color: var(--gold); margin-top: 4px; font-size: 11px; }
+.modal-close-btn {
+  padding: 10px 24px; background: var(--green);
+  border: 2px solid #fff; border-radius: 10px;
+  color: #fff; font-size: 12px; font-weight: 900;
+  cursor: pointer; box-shadow: 0 3px 0 var(--green-dark);
+}
+
+.toast-container {
+  position: absolute; top: 56px; left: 10px; right: 10px;
+  z-index: 200; display: flex; flex-direction: column; gap: 6px;
+  pointer-events: none;
+}
+.toast {
+  background: var(--panel); border: 2px solid var(--green);
+  border-radius: 10px; padding: 10px 12px; font-size: 11px;
+  box-shadow: var(--shadow);
+  animation: toastIn 0.4s ease, toastOut 0.4s ease 2.6s forwards;
+  pointer-events: auto; font-weight: 700;
+}
+.toast.error { border-color: var(--red); color: var(--red); }
+.toast.premium { border-color: var(--purple); color: var(--purple); }
+.toast.gold { border-color: var(--gold); color: var(--gold); }
+@keyframes toastIn { from{transform:translateY(-16px);opacity:0} to{transform:translateY(0);opacity:1} }
+@keyframes toastOut { to{transform:translateY(-16px);opacity:0} }
+
+.levelup-flash {
+  position: absolute; inset: 0;
+  background: radial-gradient(circle, rgba(123,31,162,0.35) 0%, transparent 70%);
+  display: none; align-items: center; justify-content: center;
+  z-index: 150; pointer-events: none;
+}
+.levelup-flash.active { display: flex; animation: levelFlash 1.2s ease forwards; }
+@keyframes levelFlash { 0%{opacity:0} 30%{opacity:1} 100%{opacity:0} }
+.levelup-text {
+  font-size: 22px; font-weight: 900; color: var(--purple);
+  text-shadow: 2px 2px 0 #fff, 0 0 20px var(--purple);
+}
+
+.db-debug { margin-top: 8px; }
+.db-debug summary { font-size: 9px; color: var(--text-dim); cursor: pointer; padding: 4px; }
+.db-debug pre {
+  font-size: 8px; background: #fff; border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px; overflow-x: auto;
+  max-height: 100px; color: var(--green-dark); font-family: monospace;
+}
+
+.tab-content::-webkit-scrollbar { width: 4px; }
+.tab-content::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<div class="phone-wrapper">
+  <div class="phone-frame" id="phoneFrame">
+
+    <div class="phone-notch">
+      <span id="statusTime">20:20</span>
+      <span>5G</span>
+      <span>🔋 99%</span>
+    </div>
+
+    <header class="app-header">
+      <button class="profile-btn" onclick="switchTab('info')" title="캐릭터정보">👤</button>
+      <div class="notif-pill" onclick="switchTab('workout')">
+        <span class="fire">🔥</span>
+        <span>탐험 부족 알림! 일일 수색 기록 보강이 필요...</span>
+      </div>
+      <button class="settings-btn" title="설정">⚙️</button>
+    </header>
+
+    <div class="toast-container" id="toastContainer"></div>
+    <div class="levelup-flash" id="levelupFlash">
+      <div class="levelup-text" id="levelupText">LEVEL UP!</div>
+    </div>
+
+    <main class="tab-content">
+
+      <!-- TAB: HOME (전투/탐험) -->
+      <div class="tab-panel active" id="tab-home">
+        <div class="stage-frame">
+          <div class="stage-banner">현재 탐험 구역 (CURRENT FIELD)</div>
+          <div class="stage-name">잊혀진 용의 둥지 / FORGOTTEN DRAGON'S LAIR <span class="panel-sub">(STAGE <span id="homeStage">4</span>)</span></div>
+          <div class="battle-scene">
+            <div class="battle-heroes">
+              <span>🧙</span><span>🏹</span><span>🧝</span><span>🗡️</span>
+            </div>
+            <div class="battle-vs">VS</div>
+            <div class="battle-boss">🐉</div>
+            <div class="battle-gold">💰💰💰</div>
+          </div>
+          <div class="stage-footer">보스: 레드 드래곤 (Red Dragon) | 수색 리워드: <strong id="homeBossReward">2,500</strong> 🪙</div>
+        </div>
+
+        <button class="btn-explore" id="btnExplore" onclick="startExploration()">⚔️ 필드 탐험 개시 (Start Exploration)</button>
+
+        <div class="stone-panel">
+          <div class="stat-bar-group">
+            <div class="stat-bar-label">
+              <span>⚡ 다음 등급 경험치 진척도</span>
+              <span class="val" id="homeExpLabel">4,500 / 2,500</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill exp" id="homeExpBar" style="width:45%"></div></div>
+          </div>
+          <div class="stat-bar-group">
+            <div class="stat-bar-label">
+              <span>❤️ 영웅 잔여 생명력 상태</span>
+              <span class="val" id="homeStaminaLabel">80 / 100</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill stamina" id="homeStaminaBar" style="width:80%"></div></div>
+          </div>
+        </div>
+
+        <div class="status-grid">
+          <div class="status-card">
+            <div class="label">최대 공격력<br>(DMG)</div>
+            <div class="value" id="homeDmg">2,400sp</div>
+          </div>
+          <div class="status-card">
+            <div class="label">탐험 진행률<br>(%)</div>
+            <div class="value" id="homeExplorePct">74.2%</div>
+          </div>
+          <div class="status-card">
+            <div class="label">보유 정산<br>골드</div>
+            <div class="value" id="homeGold">1,350</div>
+          </div>
+        </div>
+
+        <div class="stone-panel" style="margin-top:10px">
+          <div class="streak-section">
+            <span class="flame">🔥</span>
+            <span>연속 필드 탐험 스트릭: <strong id="homeStreak">5</strong>일차</span>
+            <span style="margin-left:auto">🛡️ 보호권: 1개</span>
+          </div>
+          <div class="system-log" id="systemLog">영웅 기록실 통신 대기 중...</div>
+        </div>
+      </div>
+
+      <!-- TAB: INFO (캐릭터정보) -->
+      <div class="tab-panel" id="tab-info">
+        <div class="stone-panel">
+          <div class="panel-title">성장 프로필 조정 (Growth Profile)</div>
+          <div class="avatar-section">
+            <div class="avatar-frame">
+              <span id="avatarEmoji">🧙</span>
+              <div class="level-badge" id="levelBadge">LV.5</div>
+            </div>
+            <div>
+              <div class="user-nickname" id="userNickname">정찬영</div>
+              <div class="user-id" id="userIdBadge">ID: —</div>
+              <div class="membership-toggle" onclick="toggleMembership()">
+                <div class="toggle-track" id="toggleTrack"><div class="toggle-thumb"></div></div>
+                <span id="membershipLabel">FREE</span>
+                <span class="badge-plus" id="badgePlus">PLUS ✦</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stone-panel">
+          <div class="panel-title">능력치 보너스 포인트 (<span id="statPointsAvail">5</span>)</div>
+          <div class="stat-row">
+            <span class="stat-name"><span class="abbr">STR</span> 힘</span>
+            <span class="stat-val" id="allocStr">25</span>
+            <button class="btn-plus" id="btnPlusStr" onclick="allocateStat('str')">+</button>
+          </div>
+          <div class="stat-row">
+            <span class="stat-name"><span class="abbr">DEX</span> 민첩</span>
+            <span class="stat-val" id="allocDex">18</span>
+            <button class="btn-plus" id="btnPlusDex" onclick="allocateStat('dex')">+</button>
+          </div>
+        </div>
+
+        <div class="stone-panel">
+          <div class="panel-title">🎨 캐릭터 스킨</div>
+          <div class="skin-selector">
+            <button class="skin-btn active" data-skin="basic" onclick="equipSkin('basic')"><span class="skin-emoji">🧙</span>기본</button>
+            <button class="skin-btn" data-skin="mint" onclick="equipSkin('mint')"><span class="skin-emoji">🧝</span>민트</button>
+            <button class="skin-btn" data-skin="gold" onclick="equipSkin('gold')"><span class="skin-emoji">🦸</span>골드</button>
+          </div>
+        </div>
+
+        <div class="stone-panel">
+          <div class="panel-title">📋 활성화 과제 보드판 (Daily Quests)</div>
+          <div class="quest-list" id="questList"></div>
+        </div>
+
+        <button class="btn-primary btn-ad" onclick="watchAd()">📺 광고 시청 &amp; 보상 받기</button>
+
+        <details class="db-debug">
+          <summary>🔧 DB State (Investor Debug)</summary>
+          <pre id="dbDebugPre"></pre>
+        </details>
+      </div>
+
+      <!-- TAB: SHOP (상점) -->
+      <div class="tab-panel" id="tab-shop">
+        <div class="stone-panel">
+          <div class="panel-title">인게임 자원 가방 (Inventory)</div>
+          <div class="currency-bar">
+            <div class="currency-item">🪙 <span id="shopGold">1,350</span> Gold</div>
+            <div class="currency-item" style="border-color:var(--blue);color:var(--blue)">💎 <span id="shopGems">10</span></div>
+          </div>
+        </div>
+        <div class="shop-section-title">🎨 디지털 아이템 외형 품목</div>
+        <div id="skinShopList"></div>
+        <div class="shop-section-title">🎁 리얼월드 리워드</div>
+        <div id="realShopList"></div>
+      </div>
+
+      <!-- TAB: WORKOUT (운동기록) -->
+      <div class="tab-panel" id="tab-workout">
+        <div class="stone-panel" style="padding:8px">
+          <div class="panel-title">현재 훈련 지역 (Training Field)</div>
+        </div>
+        <div class="training-tabs">
+          <button class="training-tab active" id="tabWeight" onclick="setTrainingType('weight')">
+            <span class="emoji">🏋️</span>근력 트레이닝
+          </button>
+          <button class="training-tab" id="tabCardio" onclick="setTrainingType('cardio')">
+            <span class="emoji">🏃</span>유산소 계측
+          </button>
+        </div>
+
+        <div class="stone-panel">
+          <div class="form-group">
+            <label class="form-label">트레이닝 종목 선별 (Exercise)</label>
+            <select class="form-select" id="exerciseSelect">
+              <option value="squat">스쿼트 (Squat)</option>
+              <option value="deadlift">데드리프트 (Deadlift)</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">기구 중량 (kg)</label>
+              <input class="form-input" type="number" id="inputWeight" value="80" min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">반복 횟수 (Reps)</label>
+              <input class="form-input" type="number" id="inputReps" value="10" min="1">
+            </div>
+          </div>
+        </div>
+
+        <div class="timer-display">
+          <div class="time" id="timerDisplay">00:00</div>
+          <div class="label">운동 타이머 (Duration)</div>
+        </div>
+        <div class="timer-controls">
+          <button class="btn-secondary" onclick="startTimer()">▶ 시작</button>
+          <button class="btn-secondary" onclick="pauseTimer()">⏸ 정지</button>
+          <button class="btn-secondary" onclick="resetTimer()">↺ 리셋</button>
+        </div>
+
+        <div class="stone-panel wearable-panel">
+          <div class="panel-title">⌚ 모바일 네이티브 건강 API 연동</div>
+          <div class="check-item"><span class="check">✓</span> Apple Health Data Kit Access</div>
+          <div class="check-item"><span class="check">✓</span> Google Fit Auto Tracking</div>
+          <button class="btn-secondary" style="width:100%;margin-top:8px;border-color:var(--blue);color:#1565c0" onclick="syncWearable()">
+            🔄 건강 센서 수동 동기화
+          </button>
+        </div>
+
+        <button class="btn-primary" onclick="completeWorkout()">
+          ⚔️ 스마트워치 데이터 동기화 및 완료
+        </button>
+      </div>
+
+      <!-- TAB: AI (리포트) -->
+      <div class="tab-panel" id="tab-ai">
+        <div class="stone-panel">
+          <div class="panel-title">📊 주간 누적 발달 지표 추이 (Weekly Analytics)</div>
+          <div class="analytics-grid">
+            <div class="analytics-card">
+              <div class="a-label">주간 누적 볼륨 (Volume)</div>
+              <div class="a-val blue" id="weeklyVolume">3,400kg</div>
+            </div>
+            <div class="analytics-card">
+              <div class="a-label">주간 소모 열량 (Calories)</div>
+              <div class="a-val red" id="weeklyCalories">1,240kcal</div>
+            </div>
+          </div>
+          <div class="chart-box">
+            <div style="font-size:10px;font-weight:700;color:var(--text-mid)">주간 활동 추이</div>
+            <div class="chart-bars" id="chartBars"></div>
+            <div class="chart-labels"><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span><span>일</span></div>
+          </div>
+        </div>
+
+        <div class="stone-panel">
+          <div class="panel-title">🤖 AI 지능형 알고리즘 분석 (AI Core)</div>
+          <div class="form-group">
+            <label class="form-label">목표 선택</label>
+            <select class="form-select" id="aiGoalSelect">
+              <option value="fat_loss">🏃 체지방 감량 인터벌 다이어트</option>
+              <option value="muscle_gain">💪 근비대 하이볼륨 루틴</option>
+              <option value="endurance">🏅 지구력 마라톤 트레이닝</option>
+              <option value="flexibility">🧘 유연성 &amp; 요가 프로그램</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">경험 수준</label>
+            <select class="form-select" id="aiLevelSelect">
+              <option value="beginner">초보 (Beginner)</option>
+              <option value="intermediate" selected>중급 (Intermediate)</option>
+              <option value="advanced">고급 (Advanced)</option>
+            </select>
+          </div>
+          <button class="btn-primary btn-purple" onclick="generateAI()">✨ AI 맞춤 루틴 생성</button>
+        </div>
+
+        <div class="spinner-overlay" id="aiSpinner">
+          <div class="spinner"></div>
+          <div style="font-size:11px;font-weight:700;color:var(--purple)">AI 분석 중...</div>
+        </div>
+
+        <div class="ai-output" id="aiOutput">
+          <div class="ai-card">
+            <div class="ai-card-title">🏋️ 맞춤 운동 처방</div>
+            <div class="ai-card-body" id="aiWorkout"></div>
+          </div>
+          <div class="ai-card">
+            <div class="ai-card-title">🥗 맞춤 식단 공식</div>
+            <div class="ai-card-body" id="aiDiet"></div>
+          </div>
+          <div class="ai-card">
+            <div class="ai-card-title">🎒 추천 헬스 기어</div>
+            <div class="ai-card-body" id="aiGear"></div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- 5-Tab Bottom Nav -->
+    <nav class="bottom-nav">
+      <button class="nav-tab" data-tab="info" onclick="switchTab('info')">
+        <span class="nav-icon">👤</span>정보
+      </button>
+      <button class="nav-tab" data-tab="shop" onclick="switchTab('shop')">
+        <span class="nav-icon">🛒</span>상점
+      </button>
+      <button class="nav-tab nav-home active" data-tab="home" onclick="switchTab('home')">
+        <span class="nav-icon">🏠</span>홈
+      </button>
+      <button class="nav-tab" data-tab="workout" onclick="switchTab('workout')">
+        <span class="nav-icon">💪</span>기록
+      </button>
+      <button class="nav-tab" data-tab="ai" onclick="switchTab('ai')">
+        <span class="nav-icon">🤖</span>리포트
+      </button>
+    </nav>
+
+    <!-- Exploration Battle → Clear Overlay -->
+    <div class="exploration-overlay" id="explorationOverlay">
+      <div class="battle-arena" id="battleArena">
+        <div class="battle-status" id="battleStatus">⚔️ 전투 진행 중...</div>
+        <div class="battle-field" id="battleField">
+          <div class="battle-party" id="battleParty">
+            <span>🧙</span><span>🏹</span><span>🧝</span><span>🗡️</span>
+          </div>
+          <div class="battle-enemy" id="battleEnemy">🐉</div>
+        </div>
+        <div class="boss-hp-bar">
+          <div class="boss-hp-fill" id="bossHpFill"></div>
+        </div>
+        <div class="battle-log" id="battleLog">레드 드래곤이 나타났다!</div>
+      </div>
+      <div class="clear-panel" id="clearPanel">
+        <div class="clear-badge">STAGE CLEAR!</div>
+        <div class="clear-sub">🎉 클리어! 탐험 성공!</div>
+        <div class="clear-rewards-box">
+          <div class="clear-rewards-title">🏆 획득 보상 (Rewards)</div>
+          <div class="clear-rewards-grid" id="clearRewardsGrid"></div>
+        </div>
+        <button class="btn-claim" id="btnClaim" onclick="claimExplorationRewards()">🎁 보상 수령하기</button>
+        <button class="clear-skip" onclick="closeExploration()">닫기</button>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="successModal">
+      <div class="modal-box">
+        <div class="modal-icon">⚔️</div>
+        <div class="modal-title">필드 탐험 완료!<br>Workout Synced!</div>
+        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-rewards" id="modalRewards"></div>
+        <button class="modal-close-btn" onclick="closeModal()">확인 OK</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const ENCODING = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+function generateULID() {
+  let ts = Date.now(), time = '';
+  for (let i = 9; i >= 0; i--) { time = ENCODING[ts % 32] + time; ts = Math.floor(ts / 32); }
+  let rand = '';
+  for (let i = 0; i < 16; i++) rand += ENCODING[Math.floor(Math.random() * 32)];
+  return time + rand;
+}
+
+const DB = {
+  users: { user_id: generateULID(), email: 'hero@health.gg', nickname: '정찬영', membership_type: 'FREE', watch_synced_status: 0 },
+  characters: { level: 5, exp: 4500, gold: 1350, stat_str: 25, stat_dex: 18, current_stamina: 80, max_stamina: 100, equipped_skin: 'basic', stat_points: 5, streak_days: 5 },
+  advertiser_companies: { company_id: 'ADV_KAKAO_HEALTH', company_name: 'Kakao Health Ads', account_balance_krw: 5000000, cost_per_view_krw: 120, user_reward_gold: 50 },
+  platform_finance_logs: [],
+  workout_logs: [],
+  owned_skins: ['basic'],
+  quests: [
+    { id: 'q1', title: '30분 유산소 달성', desc: 'Running 30min+', icon: '🏃', target: 1, progress: 1, reward_gold: 100, claimed: false },
+    { id: 'q2', title: '5km 러닝 챌린지', desc: 'Complete 5km run', icon: '🏅', target: 1, progress: 0, reward_gold: 200, claimed: false }
+  ]
+};
+
+const SKINS = {
+  basic: { emoji: '🧙', name: '기본 스킨', price: 0 },
+  mint:  { emoji: '🧝', name: '민트 스킨', price: 800 },
+  gold:  { emoji: '🦸', name: '골드 스킨', price: 2000 }
+};
+
+const REAL_ITEMS = [
+  { id: 'google_card', icon: '🎁', name: 'Google Gift Card', desc: '₩10,000 기프트카드', price: 5000 },
+  { id: 'protein', icon: '🥤', name: 'Protein Powder', desc: 'Whey Protein 2kg', price: 3000 }
+];
+
+let currentTab = 'home';
+let trainingType = 'weight';
+let timerSeconds = 0;
+let timerInterval = null;
+let timerRunning = false;
+let explorationBusy = false;
+let pendingExplorationRewards = null;
+let rewardsClaimed = false;
+
+function formatNum(n) { return n.toLocaleString('ko-KR'); }
+
+function showToast(msg, type = 'success') {
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.textContent = msg;
+  document.getElementById('toastContainer').appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+function logFinance(type, amount_krw, description) {
+  DB.platform_finance_logs.push({ log_id: generateULID(), transaction_type: type, amount_krw, description, created_at: new Date().toISOString() });
+}
+
+function getExpRequirement(level) { return level * 500; }
+
+function processLevelUps(char) {
+  const gained = [];
+  while (char.exp >= getExpRequirement(char.level)) {
+    char.exp -= getExpRequirement(char.level);
+    char.level++;
+    char.max_stamina += 10;
+    char.current_stamina = char.max_stamina;
+    gained.push(char.level);
+  }
+  return gained;
+}
+
+function triggerAfterWorkoutInsert(log) {
+  const user = DB.users, char = DB.characters;
+  let baseExp = Math.floor(log.duration_seconds * 0.5);
+  let expGained = baseExp, premiumBuff = false;
+  if (user.membership_type === 'PLUS') { expGained = Math.floor(baseExp * 1.5); premiumBuff = true; }
+  char.exp += expGained;
+
+  let strGain = 0, dexGain = 0;
+  if (log.training_type === 'weight') {
+    strGain = Math.floor(log.duration_seconds / 60) + Math.floor(log.weight_kg / 20);
+    char.stat_str += strGain;
+  } else {
+    dexGain = Math.floor(log.duration_seconds / 45) + 1;
+    char.stat_dex += dexGain;
+  }
+
+  const recoveredStamina = Math.floor(log.duration_seconds / 30) + 10;
+  char.current_stamina = Math.min(char.current_stamina + recoveredStamina, char.max_stamina);
+  const goldReward = Math.floor(log.duration_seconds / 10) + 20;
+  char.gold += goldReward;
+  const levelsGained = processLevelUps(char);
+  user.watch_synced_status = 1;
+
+  if (log.training_type === 'cardio') {
+    const q1 = DB.quests.find(q => q.id === 'q1');
+    if (q1 && log.duration_seconds >= 1800) q1.progress = 1;
+    const q2 = DB.quests.find(q => q.id === 'q2');
+    if (q2 && log.exercise === 'running' && log.duration_seconds >= 1500) q2.progress = 1;
+  }
+  char.streak_days++;
+  return { expGained, strGain, dexGain, goldReward, recoveredStamina, levelsGained, premiumBuff, baseExp };
+}
+
+function triggerAfterAdView() {
+  const adv = DB.advertiser_companies, char = DB.characters;
+  if (adv.account_balance_krw < adv.cost_per_view_krw) { showToast('광고주 예산이 소진되었습니다!', 'error'); return null; }
+  adv.account_balance_krw -= adv.cost_per_view_krw;
+  logFinance('AD_REVENUE', adv.cost_per_view_krw, `CPV from ${adv.company_name} → Health.GG Platform`);
+  char.gold += adv.user_reward_gold;
+  const staminaRecovered = 15;
+  char.current_stamina = Math.min(char.current_stamina + staminaRecovered, char.max_stamina);
+  return { cpv: adv.cost_per_view_krw, goldReward: adv.user_reward_gold, staminaRecovered };
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(n => n.classList.toggle('active', n.dataset.tab === tab));
+}
+
+function calcExplorationRewards() {
+  const c = DB.characters, u = DB.users;
+  let exp = 200;
+  if (u.membership_type === 'PLUS') exp = Math.floor(exp * 1.5);
+  return {
+    gold: c.level * 500,
+    exp,
+    stamina: 10,
+    premiumBuff: u.membership_type === 'PLUS'
+  };
+}
+
+function startExploration() {
+  if (explorationBusy) return;
+  explorationBusy = true;
+  rewardsClaimed = false;
+  pendingExplorationRewards = null;
+
+  const btn = document.getElementById('btnExplore');
+  const overlay = document.getElementById('explorationOverlay');
+  const party = document.getElementById('battleParty');
+  const enemy = document.getElementById('battleEnemy');
+  const hpFill = document.getElementById('bossHpFill');
+  const battleLog = document.getElementById('battleLog');
+  const battleField = document.getElementById('battleField');
+  const claimBtn = document.getElementById('btnClaim');
+
+  btn.disabled = true;
+  claimBtn.classList.remove('claimed');
+  claimBtn.textContent = '🎁 보상 수령하기';
+  claimBtn.disabled = false;
+
+  overlay.classList.remove('phase-clear');
+  overlay.classList.add('active');
+  enemy.classList.remove('defeated');
+  enemy.style.opacity = '1';
+  enemy.style.transform = '';
+  hpFill.style.width = '100%';
+  party.classList.remove('attacking');
+
+  const logs = [
+    '레드 드래곤이 나타났다!',
+    '🧙 파이어볼 발사! -320 DMG',
+    '🏹 연속 사격! 크리티컬!',
+    '🗡️ 백스탭 어택! -480 DMG',
+    '🧝 힐 & 버프 적용!',
+    '🔥 드래곤 분노! 하지만...',
+    '⚔️ 파티 총공격! FINISH!'
+  ];
+  const hpSteps = [100, 72, 48, 25, 12, 5, 0];
+
+  logs.forEach((msg, i) => {
+    setTimeout(() => {
+      battleLog.textContent = msg;
+      hpFill.style.width = hpSteps[i] + '%';
+      if (i > 0 && i < 6) {
+        party.classList.add('attacking');
+        setTimeout(() => party.classList.remove('attacking'), 400);
+        enemy.classList.add('hit');
+        setTimeout(() => enemy.classList.remove('hit'), 350);
+        showBattleFx(battleField, i);
+      }
+      if (i === 6) {
+        enemy.classList.add('defeated');
+        document.getElementById('battleStatus').textContent = '✨ 보스 처치!';
+      }
+    }, i * 500);
+  });
+
+  setTimeout(() => {
+    pendingExplorationRewards = calcExplorationRewards();
+    showClearScreen(pendingExplorationRewards);
+  }, 3800);
+}
+
+function showBattleFx(field, round) {
+  const slashes = ['💥', '⚡', '✨', '🗡️', '💫'];
+  const damages = [320, 280, 480, 350, 620];
+  const slash = document.createElement('div');
+  slash.className = 'slash-fx show';
+  slash.textContent = slashes[round % slashes.length];
+  slash.style.left = (45 + Math.random() * 20) + '%';
+  slash.style.top = (20 + Math.random() * 30) + '%';
+  field.appendChild(slash);
+  setTimeout(() => slash.remove(), 600);
+
+  const dmg = document.createElement('div');
+  dmg.className = 'dmg-pop';
+  dmg.textContent = '-' + damages[round % damages.length];
+  dmg.style.right = (15 + Math.random() * 10) + '%';
+  dmg.style.top = (10 + Math.random() * 20) + '%';
+  field.appendChild(dmg);
+  setTimeout(() => dmg.remove(), 700);
+}
+
+function showClearScreen(rewards) {
+  document.getElementById('explorationOverlay').classList.add('phase-clear');
+  const titleEl = document.querySelector('.clear-rewards-title');
+  titleEl.innerHTML = rewards.premiumBuff
+    ? '🏆 획득 보상 <span style="color:var(--purple)">(✦ PLUS 1.5x EXP)</span>'
+    : '🏆 획득 보상 (Rewards)';
+  document.getElementById('clearRewardsGrid').innerHTML = `
+    <div class="clear-reward-item"><div class="cr-icon">💰</div><div class="cr-val">+${formatNum(rewards.gold)}</div><div class="cr-label">Gold</div></div>
+    <div class="clear-reward-item"><div class="cr-icon">⭐</div><div class="cr-val">+${rewards.exp}</div><div class="cr-label">EXP</div></div>
+    <div class="clear-reward-item"><div class="cr-icon">❤️</div><div class="cr-val">+${rewards.stamina}</div><div class="cr-label">Stamina</div></div>`;
+}
+
+function claimExplorationRewards() {
+  if (!pendingExplorationRewards || rewardsClaimed) return;
+  const r = pendingExplorationRewards;
+  const c = DB.characters;
+
+  c.gold += r.gold;
+  c.exp += r.exp;
+  c.current_stamina = Math.min(c.current_stamina + r.stamina, c.max_stamina);
+  const levelsGained = processLevelUps(c);
+  c.streak_days++;
+
+  rewardsClaimed = true;
+  const btn = document.getElementById('btnClaim');
+  btn.classList.add('claimed');
+  btn.textContent = '✅ 보상 수령 완료!';
+  btn.disabled = true;
+
+  if (levelsGained.length) showLevelUpFlash(levelsGained);
+  document.getElementById('systemLog').textContent =
+    `✅ 레드 드래곤 토벌! +${formatNum(r.gold)} Gold, +${r.exp} EXP 획득`;
+  showToast(`🎁 보상 수령! +${formatNum(r.gold)} Gold, +${r.exp} EXP`, 'gold');
+  renderAll();
+
+  setTimeout(() => closeExploration(), 1200);
+}
+
+function closeExploration() {
+  document.getElementById('explorationOverlay').classList.remove('active', 'phase-clear');
+  document.getElementById('btnExplore').disabled = false;
+  explorationBusy = false;
+  pendingExplorationRewards = null;
+}
+
+function toggleMembership() {
+  DB.users.membership_type = DB.users.membership_type === 'FREE' ? 'PLUS' : 'FREE';
+  const isPlus = DB.users.membership_type === 'PLUS';
+  document.getElementById('toggleTrack').classList.toggle('plus', isPlus);
+  document.getElementById('membershipLabel').textContent = DB.users.membership_type;
+  document.getElementById('badgePlus').classList.toggle('visible', isPlus);
+  showToast(isPlus ? '✦ PLUS 멤버십! EXP 1.5x 버프!' : 'FREE 멤버십으로 전환', isPlus ? 'premium' : 'success');
+  renderAll();
+}
+
+function setTrainingType(type) {
+  trainingType = type;
+  document.getElementById('tabWeight').classList.toggle('active', type === 'weight');
+  document.getElementById('tabCardio').classList.toggle('active', type === 'cardio');
+  document.getElementById('exerciseSelect').innerHTML = type === 'weight'
+    ? '<option value="squat">스쿼트 (Squat)</option><option value="deadlift">데드리프트 (Deadlift)</option>'
+    : '<option value="running">러닝 (Running)</option>';
+}
+
+function updateTimerDisplay() {
+  const m = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+  const s = String(timerSeconds % 60).padStart(2, '0');
+  document.getElementById('timerDisplay').textContent = `${m}:${s}`;
+}
+
+function startTimer() { if (!timerRunning) { timerRunning = true; timerInterval = setInterval(() => { timerSeconds++; updateTimerDisplay(); }, 1000); } }
+function pauseTimer() { timerRunning = false; clearInterval(timerInterval); }
+function resetTimer() { pauseTimer(); timerSeconds = 0; updateTimerDisplay(); }
+
+function syncWearable() {
+  DB.users.watch_synced_status = 1;
+  if (timerSeconds < 60) { timerSeconds = 1800; updateTimerDisplay(); }
+  showToast('⌚ Apple Health & Google Fit 동기화 완료!', 'success');
+}
+
+function completeWorkout() {
+  const duration = timerSeconds > 0 ? timerSeconds : 600;
+  const log = {
+    log_id: generateULID(), user_id: DB.users.user_id,
+    exercise: document.getElementById('exerciseSelect').value,
+    training_type: trainingType, duration_seconds: duration,
+    weight_kg: parseInt(document.getElementById('inputWeight').value) || 0,
+    reps: parseInt(document.getElementById('inputReps').value) || 10,
+    created_at: new Date().toISOString()
+  };
+  DB.workout_logs.push(log);
+  const result = triggerAfterWorkoutInsert(log);
+  if (result.premiumBuff) showToast(`✦ PLUS 버프! EXP ${result.baseExp} → ${result.expGained} (1.5x)`, 'premium');
+  if (result.levelsGained.length) showLevelUpFlash(result.levelsGained);
+  showSuccessModal(result, log);
+  pauseTimer();
+  document.getElementById('systemLog').textContent = `✅ ${log.exercise} 탐험 완료! +${result.goldReward} Gold 획득`;
+  renderAll();
+}
+
+function showLevelUpFlash(levels) {
+  document.getElementById('levelupText').textContent = `LEVEL UP! LV.${levels[levels.length - 1]}`;
+  const f = document.getElementById('levelupFlash');
+  f.classList.add('active');
+  setTimeout(() => f.classList.remove('active'), 1200);
+}
+
+function showSuccessModal(result, log) {
+  document.getElementById('modalBody').innerHTML =
+    `<strong>${log.exercise.toUpperCase()}</strong> ${log.duration_seconds}초 완료!` +
+    (result.levelsGained.length ? `<br><span style="color:var(--purple)">🎉 LV.${result.levelsGained.join(' → LV.')} 달성!</span>` : '');
+  document.getElementById('modalRewards').innerHTML = `
+    <div class="modal-reward-item"><div>⭐</div><div class="r-val">+${result.expGained} EXP</div></div>
+    <div class="modal-reward-item"><div>💰</div><div class="r-val">+${result.goldReward} G</div></div>
+    <div class="modal-reward-item"><div>❤️</div><div class="r-val">+${result.recoveredStamina} HP</div></div>`;
+  document.getElementById('successModal').classList.add('active');
+}
+
+function closeModal() { document.getElementById('successModal').classList.remove('active'); }
+
+function watchAd() {
+  const r = triggerAfterAdView();
+  if (!r) return;
+  showToast(`📺 +${r.goldReward} Gold, +${r.staminaRecovered} Stamina (CPV ₩${formatNum(r.cpv)})`, 'gold');
+  renderAll();
+}
+
+function allocateStat(stat) {
+  if (DB.characters.stat_points <= 0) return;
+  DB.characters.stat_points--;
+  if (stat === 'str') DB.characters.stat_str++; else DB.characters.stat_dex++;
+  renderAll();
+}
+
+function equipSkin(id) {
+  if (!DB.owned_skins.includes(id)) { showToast('이 스킨을 먼저 구매하세요!', 'error'); return; }
+  DB.characters.equipped_skin = id;
+  renderAll();
+}
+
+function purchaseSkin(id) {
+  const skin = SKINS[id];
+  if (DB.owned_skins.includes(id)) { equipSkin(id); return; }
+  if (DB.characters.gold < skin.price) { showToast('골드가 부족합니다! 현실에서 더 땀을 흘리세요!', 'error'); return; }
+  DB.characters.gold -= skin.price;
+  DB.owned_skins.push(id);
+  DB.characters.equipped_skin = id;
+  showToast(`🎨 ${skin.name} 구매 완료!`, 'gold');
+  renderAll();
+}
+
+function purchaseRealItem(id) {
+  const item = REAL_ITEMS.find(i => i.id === id);
+  if (!item || DB.characters.gold < item.price) { showToast('골드가 부족합니다! 현실에서 더 땀을 흘리세요!', 'error'); return; }
+  DB.characters.gold -= item.price;
+  showToast(`🎁 ${item.name} 교환 신청 완료!`, 'gold');
+  renderAll();
+}
+
+function claimQuest(id) {
+  const q = DB.quests.find(x => x.id === id);
+  if (!q || q.progress < q.target || q.claimed) return;
+  q.claimed = true;
+  DB.characters.gold += q.reward_gold;
+  showToast(`📋 퀘스트 보상 +${q.reward_gold} Gold!`, 'gold');
+  renderAll();
+}
+
+const AI_DB = {
+  fat_loss: { workout: '주 4회 HIIT: 30초 전력질주 + 60초 워킹 × 10세트. 플랭크 3×60초, 버피 3×15회.', diet: 'TDEE - 500kcal. 단백질 2.0g/kg, 탄수 35%, 지방 25%.', gear: '심박 밴드 (Polar H10), 폼롤러, 저항밴드' },
+  muscle_gain: { workout: 'Push/Pull/Legs 6분할. 스쿼트 4×8, 벤치 4×6, 데드 3×5. Progressive Overload +2.5kg/주.', diet: 'TDEE + 300kcal. 단백질 2.2g/kg. 운동 후 웨이 30g + 크레아틴 5g.', gear: '리프팅 벨트, 리프팅 슈즈, 웨이 프로틴' },
+  endurance: { workout: '80/20 폴라라이즈드. Zone 2 주4×45분. Zone 4 주1×6×800m. 롱런 15km.', diet: '탄수 55-60% (운동일). 전해질 나트륨 500mg/h.', gear: 'Garmin Forerunner 265, 러닝 벨트, 에너지젤' },
+  flexibility: { workout: '요가 플로우 30분/일. 정적 스트레칭 햄스트링 3×60초. 필라테스 주2×45분.', diet: '항염 식단: 오메가-3, 터메릭. 수분 2.5L/일.', gear: '요가 매트 (Manduka PRO), 요가 블록, 스트레칭 스트랩' }
+};
+
+function generateAI() {
+  const goal = document.getElementById('aiGoalSelect').value;
+  const level = document.getElementById('aiLevelSelect').value;
+  document.getElementById('aiOutput').classList.remove('visible');
+  document.getElementById('aiSpinner').classList.add('active');
+  setTimeout(() => {
+    document.getElementById('aiSpinner').classList.remove('active');
+    const d = AI_DB[goal];
+    const note = level === 'beginner' ? ' (초보: 볼륨 70%)' : level === 'advanced' ? ' (고급: 강도 120%)' : '';
+    document.getElementById('aiWorkout').textContent = d.workout + note;
+    document.getElementById('aiDiet').textContent = d.diet;
+    document.getElementById('aiGear').textContent = d.gear;
+    document.getElementById('aiOutput').classList.add('visible');
+    showToast('🤖 AI 맞춤 루틴 생성 완료!', 'premium');
+  }, 1500);
+}
+
+function renderAll() {
+  const u = DB.users, c = DB.characters;
+  const expReq = getExpRequirement(c.level);
+  const expPct = Math.min((c.exp / expReq) * 100, 100);
+  const staPct = (c.current_stamina / c.max_stamina) * 100;
+  const dmg = c.stat_str * 96;
+  const explorePct = Math.min(99.9, (c.exp / expReq) * 74.2 + DB.workout_logs.length * 2).toFixed(1);
+
+  // Home tab
+  document.getElementById('homeStage').textContent = c.level;
+  document.getElementById('homeBossReward').textContent = formatNum(c.level * 500);
+  document.getElementById('homeExpLabel').textContent = `${formatNum(c.exp)} / ${formatNum(expReq)}`;
+  document.getElementById('homeExpBar').style.width = expPct + '%';
+  document.getElementById('homeStaminaLabel').textContent = `${c.current_stamina} / ${c.max_stamina}`;
+  document.getElementById('homeStaminaBar').style.width = staPct + '%';
+  document.getElementById('homeDmg').textContent = formatNum(dmg) + 'sp';
+  document.getElementById('homeExplorePct').textContent = explorePct + '%';
+  document.getElementById('homeGold').textContent = formatNum(c.gold);
+  document.getElementById('homeStreak').textContent = c.streak_days;
+
+  // Info tab
+  document.getElementById('userNickname').textContent = u.nickname;
+  document.getElementById('userIdBadge').textContent = 'ID: ' + u.user_id;
+  document.getElementById('levelBadge').textContent = 'LV.' + c.level;
+  document.getElementById('avatarEmoji').textContent = SKINS[c.equipped_skin].emoji;
+  document.getElementById('statPointsAvail').textContent = c.stat_points;
+  document.getElementById('allocStr').textContent = c.stat_str;
+  document.getElementById('allocDex').textContent = c.stat_dex;
+  document.getElementById('btnPlusStr').disabled = c.stat_points <= 0;
+  document.getElementById('btnPlusDex').disabled = c.stat_points <= 0;
+
+  document.querySelectorAll('.skin-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.skin === c.equipped_skin));
+  const isPlus = u.membership_type === 'PLUS';
+  document.getElementById('toggleTrack').classList.toggle('plus', isPlus);
+  document.getElementById('membershipLabel').textContent = u.membership_type;
+  document.getElementById('badgePlus').classList.toggle('visible', isPlus);
+
+  document.getElementById('questList').innerHTML = DB.quests.map(q => {
+    const ready = q.progress >= q.target && !q.claimed;
+    return `<div class="quest-card ${ready || q.claimed ? 'done' : ''}">
+      <div class="quest-icon">${q.icon}</div>
+      <div class="quest-info"><div class="title">${q.title}</div><div class="desc">${q.desc} — ${q.reward_gold}G</div></div>
+      <button class="quest-reward-btn ${ready ? 'ready' : ''}" ${!ready || q.claimed ? 'disabled' : ''} onclick="claimQuest('${q.id}')">
+        ${q.claimed ? '수령완료' : ready ? '보상 수령' : '진행중'}
+      </button></div>`;
+  }).join('');
+
+  // Shop
+  document.getElementById('shopGold').textContent = formatNum(c.gold);
+  document.getElementById('skinShopList').innerHTML = Object.entries(SKINS).filter(([id]) => id !== 'basic').map(([id, s]) => {
+    const owned = DB.owned_skins.includes(id), eq = c.equipped_skin === id;
+    return `<div class="shop-item"><div class="item-icon">${s.emoji}</div><div class="item-info"><div class="item-name">${s.name}</div><div class="item-desc">Digital Avatar Skin</div></div>
+      <button class="shop-buy-btn ${eq ? 'equipped' : ''}" onclick="purchaseSkin('${id}')">${eq ? '장착중' : owned ? '장착' : s.price + ' G'}</button></div>`;
+  }).join('');
+  document.getElementById('realShopList').innerHTML = REAL_ITEMS.map(i =>
+    `<div class="shop-item"><div class="item-icon">${i.icon}</div><div class="item-info"><div class="item-name">${i.name}</div><div class="item-desc">${i.desc}</div></div>
+      <button class="shop-buy-btn" onclick="purchaseRealItem('${i.id}')">${formatNum(i.price)} G</button></div>`
+  ).join('');
+
+  // AI analytics
+  const vol = 3400 + DB.workout_logs.length * 200;
+  const cal = 1240 + DB.workout_logs.length * 80;
+  document.getElementById('weeklyVolume').textContent = formatNum(vol) + 'kg';
+  document.getElementById('weeklyCalories').textContent = formatNum(cal) + 'kcal';
+  const heights = [40, 55, 35, 70, 50, 80, 60].map((h, i) => h + DB.workout_logs.length * 3 * (i % 3));
+  document.getElementById('chartBars').innerHTML = heights.map(h =>
+    `<div class="chart-bar" style="height:${Math.min(h, 100)}%"></div>`
+  ).join('');
+
+  document.getElementById('dbDebugPre').textContent = JSON.stringify({
+    users: DB.users, characters: DB.characters,
+    advertiser_balance: DB.advertiser_companies.account_balance_krw,
+    finance_logs: DB.platform_finance_logs.length,
+    workout_logs: DB.workout_logs.length
+  }, null, 2);
+}
+
+function updateClock() {
+  const n = new Date();
+  document.getElementById('statusTime').textContent =
+    String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
+}
+
+updateClock();
+setInterval(updateClock, 30000);
+renderAll();
+</script>
+</body>
+</html>
