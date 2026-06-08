@@ -490,6 +490,64 @@ html, body {
   margin-top: 6px;
 }
 
+.streak-calendar {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding: 10px;
+  background-color: #f7f9fa; /* 크림 화이트 베이스 적용 */
+  border: 3px solid #2d3748; /* 볼드한 레트로 외곽선 규격 적용 */
+  border-radius: 12px;
+}
+
+.day-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 13%;
+  padding: 6px 0;
+  border-radius: 8px;
+  border: 3px solid #e2e8f0;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+/* 🔥 스트릭 활성화 상태 (현재 5일차 기준 월~금 활성화 예시) */
+.day-box.active {
+  border-color: #2d3748;
+  background-color: #fff9db; /* 바나나 옐로우 톤의 부드러운 강조색 */
+  box-shadow: 0 4px 0px #2d3748;
+  transform: translateY(-2px);
+}
+
+.day-label {
+  font-size: 11px;
+  font-weight: bold;
+  color: #a0aec0;
+  margin-bottom: 4px;
+}
+
+.day-box.active .day-label {
+  color: #2d3748;
+}
+
+.streak-icon {
+  font-size: 16px;
+  filter: grayscale(100%); /* 비활성화 요일은 회색조로 흐리게 처리 */
+  opacity: 0.3;
+}
+
+.day-box.active .streak-icon {
+  filter: grayscale(0%);
+  opacity: 1;
+  animation: streak-bounce 1.2s infinite alternate;
+}
+
+@keyframes streak-bounce {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
 /* ── Character Info Tab ── */
 .avatar-section { display: flex; gap: 12px; align-items: center; }
 .avatar-frame {
@@ -1249,7 +1307,37 @@ html, body {
             <span>연속 필드 탐험 스트릭: <strong id="homeStreak">5</strong>일차</span>
             <span style="margin-left:auto">🛡️ 보호권: 1개</span>
           </div>
-          <div class="system-log" id="systemLog">영웅 기록실 통신 대기 중...</div>
+          
+          <div class="streak-calendar">
+            <div class="day-box active">
+              <span class="day-label">월</span>
+              <span class="streak-icon">🔥</span>
+            </div>
+            <div class="day-box active">
+              <span class="day-label">화</span>
+              <span class="streak-icon">🔥</span>
+            </div>
+            <div class="day-box active">
+              <span class="day-label">수</span>
+              <span class="streak-icon">🔥</span>
+            </div>
+            <div class="day-box active">
+              <span class="day-label">목</span>
+              <span class="streak-icon">🔥</span>
+            </div>
+            <div class="day-box active">
+              <span class="day-label">금</span>
+              <span class="streak-icon">🔥</span>
+            </div>
+            <div class="day-box">
+              <span class="day-label">토</span>
+              <span class="streak-icon">🔥</span>
+            </div>
+            <div class="day-box">
+              <span class="day-label">일</span>
+              <span class="streak-icon">🔥</span>
+            </div>
+          </div>
         </div>
       </div>
 
